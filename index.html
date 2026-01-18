@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ポートフォリオ | Ip Kin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+    
+    /* --- 發電模式 (Electric Mode) CSS --- */
+    
+    /* 1. 全局背景與文字 */
+    body.electric-active {
+      background-color: #fefce8; /* yellow-50 */
+      color: #451a03; /* amber-950 (深啡色) */
+    }
+
+    /* 2. Header 變色 (重要修改) */
+    body.electric-active header {
+        background-color: rgba(254, 252, 232, 0.95) !important; /* 淺黃色半透明 */
+        border-bottom: 1px solid #fde047;
+    }
+    /* 強制將 Header 入面的藍色字變成深啡色 */
+    body.electric-active header .text-blue-900 {
+        color: #451a03 !important;
+    }
+    body.electric-active header nav a {
+        color: #78350f !important; /* amber-900 */
+    }
+    body.electric-active header nav a:hover {
+        color: #d97706 !important; /* amber-600 */
+    }
+
+    /* 3. 各個 Section 背景微調 */
+    body.electric-active section#works,
+    body.electric-active section#skills,
+    body.electric-active section#vision {
+        background-color: #fffbeb; /* yellow-100 */
+    }
+    
+    /* 4. 卡片變色 */
+    body.electric-active .bg-white {
+        background-color: #ffffff;
+        border: 1px solid #fde047; /* 黃色邊框 */
+    }
+    
+    /* 5. 卡片內藍色標題變色 */
+    body.electric-active .text-blue-800,
+    body.electric-active .text-blue-700,
+    body.electric-active .text-blue-600 {
+        color: #92400e !important; /* amber-800 */
+    }
+
+    /* Logo 發光特效 */
+    .electric-glow {
+        filter: drop-shadow(0 0 25px rgba(234, 179, 8, 1)) !important; /* 黃金光 */
+        transform: scale(1.05);
+    }
+
+    /* Canvas 設定 */
+    #neural-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 relative">
+
+  <canvas id="neural-canvas"></canvas>
+
+  <header class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-500">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-16 md:h-20"> 
+      <a href="#" class="relative flex items-center h-full group">
+        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-24 h-24 md:w-28 md:h-28 transition-transform duration-300 group-hover:scale-110">
+             <img src="images/logoOpacity.png" alt="KinLab Logo" class="w-full h-full object-contain filter drop-shadow-md">
+        </div>
+        <div class="text-3xl font-bold text-blue-900 ml-20 md:ml-24 transition-colors duration-300">KinLab.</div>
+      </a>
+      <nav class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="#about" class="hover:text-blue-600 transition">About</a>
+        <a href="#skills" class="hover:text-blue-600 transition">Skills</a>
+        <a href="#works" class="hover:text-blue-600 transition">Works</a>
+        <a href="#vision" class="hover:text-blue-600 transition">Vision</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="about" class="relative bg-cover bg-center h-screen" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 to-blue-900/50 transition-colors duration-500" id="hero-overlay"></div>
+    
+    <div class="relative z-10 flex flex-col justify-center items-center h-full text-white px-4">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-10 mb-10" data-aos="fade-up">
+        
+        <div class="w-52 h-52 md:w-80 md:h-80 flex-shrink-0 relative cursor-pointer" data-aos="zoom-in" data-aos-delay="200" id="logo-container">
+           <img src="images/logo.png" 
+               id="main-logo"
+               alt="Nano Banana IT Logo" 
+               class="w-full h-full object-contain rounded-2xl border-2 border-blue-400/50 transition duration-300">
+           <p class="absolute -bottom-8 w-full text-center text-sm text-blue-200 opacity-70 animate-pulse">Click Logo to Power Up!</p>
+        </div>
+
+        <div class="text-center md:text-left max-w-xl">
+          <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white to-blue-200">
+            Ip Kin
+          </h1>
+          <p class="text-xl md:text-3xl font-light leading-relaxed text-blue-100">
+            Engineering & Creative Solutions
+          </p>
+          <p class="mt-2 text-sm md:text-base text-blue-300 font-medium tracking-wider uppercase">
+            [ Kin Tech Lab ]
+          </p>
+        </div>
+      </div>
+      
+      <a href="#works" class="px-10 py-4 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white font-bold rounded-full shadow-lg shadow-blue-500/30 transition-all transform hover:-translate-y-1 hover:scale-105" data-aos="fade-up" data-aos-delay="400">
+        View My Works
+      </a>
+    </div>
+  </section>
+
+  <section id="skills" class="max-w-5xl mx-auto py-20 px-6 transition-colors duration-300" data-aos="fade-up">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">スキルセット</h2>
+    <div class="bg-white p-8 rounded-2xl shadow-lg transition-colors duration-300">
+        <div class="grid md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4 border-b pb-2 border-blue-200">技術スタック</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>言語: Python, Java, JavaScript, HTML, CSS</li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>フレームワーク: Spring Boot, Flask</li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>ツール: Git, VSCode</li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>クラウド: AWS (EC2, S3基礎)</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4 border-b pb-2 border-blue-200">語学・その他</h3>
+                <ul class="space-y-3">
+                    <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>日本語: JLPT N1 </li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>英語</li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>中国語</li>
+                    <li class="flex items-center"><span class="w-3 h-3 bg-green-500 rounded-full mr-3"></span>広東語: ネイティブ</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="works" class="bg-gray-100 py-20 px-6 transition-colors duration-300">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12 text-gray-800" data-aos="fade-up">成果・制作物</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col-reverse md:flex-row items-center gap-5 cursor-pointer hover:scale-[1.02]" 
+             data-aos="fade-up"
+             onclick="openModal('IoT Control System', 'WEBから遠隔でLEDを調光、センサー監視、Telegram通知を行うシステム。MicroPythonを使用。ESP32を用いてハードウェア制御を実現しました。', 'images/iot.jpg', ['Python', 'IoT', 'MicroPython'], 'https://github.com/RFTDkin/iot', null)">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-800 mb-2">IoT Control System</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">WEBから遠隔でLEDを調光、センサー監視、Telegram通知を行うシステム...</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Python</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">IoT</span>
+            </div>
+          </div>
+          <div class="w-full md:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+             <img src="images/iot.jpg" alt="IoT Work" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col-reverse md:flex-row items-center gap-5 cursor-pointer hover:scale-[1.02]" 
+             data-aos="fade-up" data-aos-delay="100"
+             onclick="openModal('Soccer Match AI', 'Google Colabを用いたサッカー試合予測モデル。過去の試合データをScikit-learnで分析し、勝敗を予測するモデルを構築。データ前処理から評価まで一貫して実施。', 'images/soccer.png', ['Python', 'Scikit-learn', 'Pandas'], 'https://github.com/RFTDkin/soccer', null)">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-800 mb-2">Soccer Match AI</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Google Colabを用いたサッカー試合予測モデル。過去データを学習し...</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Python</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Scikit-learn</span>
+            </div>
+          </div>
+          <div class="w-full md:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+            <img src="images/soccer.png" alt="AI Work" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col-reverse md:flex-row items-center gap-5 cursor-pointer hover:scale-[1.02]" 
+             data-aos="fade-up" data-aos-delay="200"
+             onclick="openModal('Health App', 'Flaskを用いた健康診断管理アプリ。CRUD機能、ログイン認証、データ可視化を実装。Renderでデプロイ済み。', 'images/healthTest.png', ['Flask', 'SQL'], 'https://github.com/RFTDkin/healthTest', 'https://healthtest-zipt.onrender.com')">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-800 mb-2">Health App</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Flaskを用いた健康診断管理アプリ。MVCモデルに基づいた設計とDB連携...</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Flask</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">SQL</span>
+            </div>
+          </div>
+          <div class="w-full md:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+            <img src="images/healthTest.png" alt="Web Work" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col-reverse md:flex-row items-center gap-5 cursor-pointer hover:scale-[1.02]" 
+             data-aos="fade-up" data-aos-delay="300"
+             onclick="openModal('MySelf Introduction Page', 'ポケモンテーマを取り入れたインタラクティブな自己紹介サイト。HTML/CSS/JSのみで構築し、レスポンシブ対応済み。', 'images/mySelf.png', ['HTML/CSS', 'JS'], 'https://github.com/RFTDkin/hobby', 'https://rftdkin.github.io/hobby/')">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-800 mb-2">MySelf Introduction Page</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">ポケモンテーマを取り入れたインタラクティブな自己紹介サイト...</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">HTML/CSS</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">JS</span>
+            </div>
+          </div>
+          <div class="w-full md:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+            <img src="images/mySelf.png" alt="Frontend Work" class="w-full h-full object-cover">
+          </div>
+        </div> 
+
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col-reverse md:flex-row items-center gap-5 cursor-pointer hover:scale-[1.02]" 
+             data-aos="fade-up" data-aos-delay="400"
+             onclick="openModal('School CommunitySite', 'Flaskを用いた大規模な学校コミュニティサイト。リアルタイムチャット(Socket.IO)、AWS S3画像保存、Postgresデータベース連携など、フルスタックな機能を実装。', 'images/communitySite.png', ['Flask', 'AWS', 'Postgres', 'Socket.IO'], 'https://github.com/jin170424/team1_AYATAKA', 'https://youtube.com/watch?v=ARXE_rWaV6c')">
+          <div class="flex-1">
+            <h3 class="text-lg font-bold text-blue-800 mb-2">School CommunitySite</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">Flaskを用いた学校コミュニティサイト。ユーザー管理や掲示板機能を実装...</p>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Flask</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">AWS</span>
+                <span class="text-xs bg-gray-200 px-2 py-1 rounded">Socket.IO</span>
+            </div>            
+          </div>
+          <div class="w-full md:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg border border-gray-200">
+            <img src="images/communitySite.png" alt="Community Site" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="vision" class="max-w-4xl mx-auto my-20 p-8 transition-colors duration-300" data-aos="fade-up">
+    <h2 class="text-3xl font-bold text-center mb-10">今後の目標とビジョン</h2>
+    <div class="space-y-6">
+      <div class="bg-white p-6 rounded-lg border-l-4 border-blue-500 shadow-sm transition-colors duration-300">
+        <h3 class="text-xl font-bold text-gray-800">短期: 現場力</h3>
+        <p class="mt-2 text-gray-600">Web開発の現場で実務経験を積み、チーム開発（Agile/Scrum）のスキルを高める。</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg border-l-4 border-indigo-500 shadow-sm transition-colors duration-300">
+        <h3 class="text-xl font-bold text-gray-800">中期: フルスタック</h3>
+        <p class="mt-2 text-gray-600">フロントからバックエンド、インフラまで一貫して担当できるエンジニアを目指す。</p>
+      </div>
+      <div class="bg-white p-6 rounded-lg border-l-4 border-purple-500 shadow-sm transition-colors duration-300">
+        <h3 class="text-xl font-bold text-gray-800">長期: 社会課題解決</h3>
+        <p class="mt-2 text-gray-600">IoTやAI分野にも挑戦し、技術の力で社会課題を解決するシステムを創る。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="cert" class="bg-gray-800 text-white py-16 px-6">
+    <div class="max-w-4xl mx-auto text-center" data-aos="zoom-in">
+      <h2 class="text-2xl font-bold mb-8">資格・学習状況</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-4 bg-gray-700 rounded-lg">基本情報技術者</div>
+        <div class="p-4 bg-gray-700 rounded-lg">Oracle Java Bronze</div>
+        <div class="p-4 bg-gray-700 rounded-lg">クラウド検定 3級</div>
+        <div class="p-4 bg-gray-700 rounded-lg">JLPT N1</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-gray-900 text-gray-400 text-center py-8">
+    <p>© 2025 Ip Kin. All rights reserved.</p>
+    <div class="mt-4 space-x-4">
+        <a href="#" class="hover:text-white transition">GitHub</a>
+        <a href="#" class="hover:text-white transition">LinkedIn</a>
+    </div>
+  </footer>
+
+  <div id="project-modal" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop" onclick="closeModal()"></div>
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-2xl bg-white rounded-2xl shadow-2xl transform scale-95 opacity-0 transition-all duration-300 flex flex-col overflow-hidden max-h-[90vh]" id="modal-content">
+        
+        <div class="relative h-48 md:h-64 bg-gray-100 flex-shrink-0">
+            <img id="modal-img" src="" alt="Project Image" class="w-full h-full object-cover">
+            <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-6 md:p-8 overflow-y-auto">
+            <h3 id="modal-title" class="text-2xl font-bold text-gray-800 mb-3">Project Title</h3>
+            
+            <div id="modal-tags" class="flex flex-wrap gap-2 mb-4">
+                </div>
+
+            <p id="modal-desc" class="text-gray-600 leading-relaxed mb-8">Description...</p>
+
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a id="modal-github" href="#" target="_blank" class="flex-1 flex justify-center items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition font-medium">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub Code
+                </a>
+                
+                <a id="modal-demo" href="#" target="_blank" class="flex-1 flex justify-center items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition font-medium hidden">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    <span id="demo-text">Live Demo</span>
+                </a>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // --- 神經網絡 (Neural Network) 特效 ---
+    const mainLogo = document.getElementById('main-logo');
+    const logoContainer = document.getElementById('logo-container');
+    const body = document.body;
+    const canvas = document.getElementById('neural-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let isElectric = false;
+    let particles = [];
+    let animationFrameId = null;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Toggle 邏輯
+    logoContainer.addEventListener('click', (e) => {
+        isElectric = !isElectric;
+        
+        if (isElectric) {
+            // 開啟
+            const rect = mainLogo.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+            
+            body.classList.add('electric-active');
+            mainLogo.classList.add('electric-glow');
+            
+            // 啟動神經網絡生長
+            createNeuralBurst(startX, startY);
+            
+        } else {
+            // 關閉
+            turnOff();
+        }
+    });
+
+    function turnOff() {
+        body.classList.remove('electric-active');
+        mainLogo.classList.remove('electric-glow');
+        particles = [];
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
+
+    // 粒子類別 (神經元)
+    class NeuralParticle {
+        constructor(x, y, angle, generation) {
+            this.x = x;
+            this.y = y;
+            this.angle = angle;
+            this.speed = Math.random() * 8 + 6; // 速度
+            this.generation = generation; // 代數 (控制分裂)
+            
+            this.life = 1.0; 
+            this.decay = 0.015; // 消失速度
+            this.history = []; // 畫線用
+            this.historyMax = 10;
+        }
+
+        update() {
+            // 1. 隨機改變方向 (Jitter) - 令線條變鋸齒狀
+            if(Math.random() < 0.3) {
+                this.angle += (Math.random() - 0.5) * 0.5;
+            }
+
+            // 2. 移動
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed;
+            
+            // 3. 記錄路徑
+            this.history.push({x: this.x, y: this.y});
+            if (this.history.length > this.historyMax) {
+                this.history.shift();
+            }
+
+            // 4. 生命倒數
+            this.life -= this.decay;
+        }
+
+        draw(ctx) {
+            ctx.beginPath();
+            // 金黃色線條
+            ctx.strokeStyle = `rgba(234, 179, 8, ${this.life})`; 
+            // 越後代越幼
+            ctx.lineWidth = Math.max(1, 4 - this.generation); 
+            
+            if (this.history.length > 0) {
+                ctx.moveTo(this.history[0].x, this.history[0].y);
+                for (let i = 1; i < this.history.length; i++) {
+                    ctx.lineTo(this.history[i].x, this.history[i].y);
+                }
+            }
+            ctx.stroke();
+        }
+    }
+
+    function createNeuralBurst(x, y) {
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        particles = [];
+        
+        // 初始：向四面八方發射 12 條主幹
+        const branches = 12;
+        for (let i = 0; i < branches; i++) {
+            const angle = (Math.PI * 2 * i) / branches;
+            particles.push(new NeuralParticle(x, y, angle, 0));
+        }
+        animate();
+    }
+
+    function animate() {
+        // 保留少少殘影 (Trail Effect) 更有速度感
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = 'source-over';
+
+        if (particles.length === 0) {
+            animationFrameId = null;
+            return;
+        }
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            const p = particles[i];
+            p.update();
+            p.draw(ctx);
+
+            // 分裂邏輯 (Branching)
+            // 條件：唔好太老 (p.life > 0.5)，代數唔好太深 (p.generation < 3)
+            if (p.life > 0.5 && p.generation < 3 && Math.random() < 0.05) {
+                // 分裂出一條新線，角度偏轉少少
+                const branchAngle = p.angle + (Math.random() - 0.5) * 1.5;
+                particles.push(new NeuralParticle(p.x, p.y, branchAngle, p.generation + 1));
+            }
+
+            // 移除條件
+            if (p.life <= 0 || 
+                p.x < -100 || p.x > canvas.width + 100 || 
+                p.y < -100 || p.y > canvas.height + 100) {
+                particles.splice(i, 1);
+            }
+        }
+
+        animationFrameId = requestAnimationFrame(animate);
+    }
+
+    // --- Modal Logic ---
+    const modal = document.getElementById('project-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalContent = document.getElementById('modal-content');
+    const modalImg = document.getElementById('modal-img');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalTags = document.getElementById('modal-tags');
+    const modalGithub = document.getElementById('modal-github');
+    const modalDemo = document.getElementById('modal-demo');
+    const demoText = document.getElementById('demo-text');
+
+    function openModal(title, desc, img, tags, githubLink, demoLink) {
+        // 設定內容
+        modalTitle.innerText = title;
+        modalDesc.innerText = desc;
+        modalImg.src = img;
+        modalGithub.href = githubLink;
+
+        // 設定 Tags
+        modalTags.innerHTML = '';
+        tags.forEach(tag => {
+            const span = document.createElement('span');
+            span.className = 'text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-medium';
+            span.innerText = tag;
+            modalTags.appendChild(span);
+        });
+
+        // 設定 Demo 按鈕 (如果有 link)
+        if (demoLink) {
+            modalDemo.href = demoLink;
+            modalDemo.classList.remove('hidden');
+            
+            // 檢查是否為 YouTube
+            if (demoLink.includes('youtube.com') || demoLink.includes('youtu.be')) {
+                demoText.innerText = 'Watch Demo Video';
+                modalDemo.classList.replace('bg-blue-600', 'bg-red-600');
+                modalDemo.classList.replace('hover:bg-blue-500', 'hover:bg-red-500');
+            } else {
+                demoText.innerText = 'Live Demo';
+                // 復原顏色 (以防上次開了 YouTube)
+                modalDemo.classList.replace('bg-red-600', 'bg-blue-600');
+                modalDemo.classList.replace('hover:bg-red-500', 'hover:bg-blue-500');
+            }
+        } else {
+            modalDemo.classList.add('hidden');
+        }
+
+        // 顯示 Modal (動畫)
+        modal.classList.remove('hidden');
+        // 小小延遲讓 transition 生效
+        setTimeout(() => {
+            modalBackdrop.classList.remove('opacity-0');
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('scale-100');
+        }, 10);
+        
+        // 禁止背景滾動
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modalBackdrop.classList.add('opacity-0');
+        modalContent.classList.remove('scale-100');
+        modalContent.classList.add('opacity-0', 'scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }, 300);
+    }
+    
+    // 按 ESC 關閉
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            closeModal();
+        }
+    });
+  </script>
+
+</body>
+</html>
